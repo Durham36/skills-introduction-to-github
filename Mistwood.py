@@ -171,8 +171,7 @@ def Store1():
     open_store(Shop1, "Mistwood Shop Level 1")
 
 def encounter_monster():
-    Roll2 = random.randint(0, 2)
-    category = ["Common", "Rare", "Boss"][Roll2]
+    category = random.choice(["Common", "Rare"])
     monsters = Monster0[category]
     monster = random.choice(monsters)
     print(f"\nA wild {monster['name']} has appeared! (Category: {category})")
