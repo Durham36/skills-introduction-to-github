@@ -248,20 +248,30 @@ def combat(monster):
 def Mob0():
     encounter_monster()
 
-# ---- Game Loop ----
-while True:
-    print("\n1. View Inventory\n2. Fight a Monster\n3. Visit a Shop\n4. Visit Mistwood Basic Shop (StoreB)\n5. Quit Game")
-    choice = input("What would you like to do? ").strip()
-    if choice == "1":
-        player.show_inventory()
-    elif choice == "2":
-        encounter_monster()
-    elif choice == "3":
-        Store0()  # Example: Visit Shop Level 0
-    elif choice == "4":
-        StoreB()  # Visit the Basic Orb Shop! (StoreB)
-    elif choice == "5":
-        print("Exiting the game...")
-        break
-    else:
-        print("Invalid choice, please try again.")
+def main_menu():
+    while True:
+        print("\n=== Main Menu ===")
+        print("1. Fight a Monster")
+        print("2. Boss Gauntlet")
+        print("3. Show Inventory")
+        print("4. Open Store Level (Basic)")
+        print("5. Open Store Level (1)")
+        print("6. Exit")
+        
+        choice = input("Choose an option: ").strip()
+        
+        if choice == "1":
+            Mob0()
+        elif choice == "2":
+            boss_gauntlet()
+        elif choice == "3":
+            player.show_inventory()
+        elif choice == "4":
+            StoreB()
+        elif choice == "5":
+            Store0()
+        elif choice == "6":
+            print("Exit")
+            break
+        else:
+            print("Invalid option")
