@@ -247,6 +247,21 @@ def combat(monster):
 
 def Mob0():
     encounter_monster()
+    
+def boss_gauntlet():
+    print("\n Starting the Gauntlet")
+    
+    for category in ["Common", "Rare", "Boss"]:
+        if player.health <= 0:
+            print("You Died!")
+            return
+        
+        print(f"\nNext up: {category} Monster")
+        monster = random.choice(Monster0[category])
+        combat(monster)
+        
+    if player.health > 0:
+        print("\n You wone the Gauntlet!")
 
 def main_menu():
     while True:
@@ -255,7 +270,7 @@ def main_menu():
         print("2. Boss Gauntlet")
         print("3. Show Inventory")
         print("4. Open Store Level (Basic)")
-        print("5. Open Store Level (1)")
+        print("5. Open Store Level (0)")
         print("6. Exit")
         
         choice = input("Choose an option: ").strip()
@@ -275,3 +290,6 @@ def main_menu():
             break
         else:
             print("Invalid option")
+        
+if __name__ == "__main__":
+    main_menu()
