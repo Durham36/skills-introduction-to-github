@@ -177,7 +177,7 @@ def encounter_monster():
     print(f"\nA wild {monster['name']} has appeared! (Category: {category})")
     combat(monster)
 
-def combat(monster):
+def combat(monster, allow_heal=True):
     print(f"Engaging in combat with {monster['name']}...\n")
     monster_health = monster["health"]
     print(f"{monster['name']} has {monster_health} HP.")
@@ -219,6 +219,9 @@ def combat(monster):
             gold_reward = monster.get("gold_drop", 1)
             player.gold += gold_reward
             print(f"\nYou defeated {monster['name']}! It dropped {gold_reward} gold.")
+            
+            if allow_heal:
+                player.health = player.max_health
             player.show_inventory()  # Show inventory after defeating the monster
             break
 
@@ -257,10 +260,11 @@ def boss_gauntlet():
         
         print(f"\nNext up: {category} Monster")
         monster = random.choice(Monster0[category])
-        combat(monster)
+        combat(monster, allow_heal=False)
         
     if player.health > 0:
         print("\n You wone the Gauntlet!")
+        player.health = player.max_health
 
 def main_menu():
     while True:
