@@ -101,16 +101,16 @@ print(biome[Roll1], levels[Roll1])
 
 Monster0 = {
     "Common": [
-        {"name": "Mistwood Spider", "health": 2, "min_attack": 0, "max_attack": 1},
+        {"name": "Mistwood Spider", "health": 2, "min_attack": 0, "max_attack": 1, "gold_drop": 1},
     ],
     "Rare": [
-        {"name": "Mistwood Ooze", "health": 3, "min_attack": 0, "max_attack": 2},
-        {"name": "Mistwood Serpent", "health": 4, "min_attack": 0, "max_attack": 1},
+        {"name": "Mistwood Ooze", "health": 3, "min_attack": 0, "max_attack": 2, "gold_drop": 2},
+        {"name": "Mistwood Serpent", "health": 4, "min_attack": 0, "max_attack": 1, "gold_drop": 2},
     ],
     "Boss": [
-        {"name": "Spider Queen", "health": 5, "min_attack": 0, "max_attack": 3},
-        {"name": "Giant Ooze", "health": 4, "min_attack": 1, "max_attack": 2},
-        {"name": "Corrupted Serpent", "health": 7, "min_attack": 0, "max_attack": 1},
+        {"name": "Spider Queen", "health": 5, "min_attack": 0, "max_attack": 3, "gold_drop": 5},
+        {"name": "Giant Ooze", "health": 4, "min_attack": 1, "max_attack": 2, "gold_drop": 4},
+        {"name": "Corrupted Serpent", "health": 7, "min_attack": 0, "max_attack": 1, "gold_drop": 4},
     ]
 }
 
@@ -217,7 +217,9 @@ def combat(monster):
 
         if monster_health <= 0:
             print(f"\nYou defeated {monster['name']}! Monster defeated.")
-            player.gold += 1
+            gold_reward = monster.get("gold_drop", 1)
+            player.gold += gold_reward
+            print(f"\nYou defeated {monster['name']}! It dropped {gold_reward} gold.")
             player.show_inventory()  # Show inventory after defeating the monster
             break
 
