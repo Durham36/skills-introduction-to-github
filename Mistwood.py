@@ -1,94 +1,5 @@
 import random
-
-# ---- Item Classes ----
-class Item:
-    def __init__(self, name, cost):
-        self.name = name
-        self.cost = cost
-
-    def use(self, player):
-        print(f"You used {self.name}, but nothing happened.")
-
-class HealthPotion(Item):
-    def __init__(self):
-        super().__init__("Health Potion", 5)
-
-    def use(self, player):
-        if player.health < player.max_health:
-            heal_amount = 2
-            player.health = min(player.max_health, player.health + heal_amount)
-            print(f"You used a Health Potion and healed {heal_amount} HP!")
-        else:
-            print("Your health is already full.")
-
-class FireOrb(Item):
-    def __init__(self):
-        super().__init__("Fire Orb", 2)
-
-    def use(self, player):
-        player.fire_orb_bonus = 1
-        print("You used a Fire Orb! +1 damage on your next attack.")
-
-# ---- Player Class ----
-class Player:
-    def __init__(self):
-        self.inventory = []
-        self.gold = 10
-        self.health = 3
-        self.max_health = 3
-        self.level = 0
-        self.fire_orb_bonus = 0
-
-    def use_item(self):
-        if not self.inventory:
-            print("Your inventory is empty.")
-            return
-
-        print("\nInventory Items:")
-        for i, item in enumerate(self.inventory, 1):
-            print(f"{i}. {item.name}")
-
-        choice = input("Enter the number of the item you want to use (or press enter to cancel): ").strip()
-        if not choice:
-            print("Cancelled item use.")
-            return
-
-        if choice.isdigit():
-            index = int(choice) - 1
-            if 0 <= index < len(self.inventory):
-                item = self.inventory.pop(index)
-                item.use(self)
-            else:
-                print("Invalid item number.")
-        else:
-            print("Invalid input.")
-
-    def buy_item(self, item_name, item_cost):
-        item_lookup = {
-            "Health Potion": HealthPotion,
-            "Fire Orb": FireOrb,
-        }
-
-        if self.gold >= item_cost:
-            item_class = item_lookup.get(item_name)
-            if item_class:
-                self.inventory.append(item_class())
-            else:
-                print(f"{item_name} is not implemented as a class. Adding as placeholder.")
-                self.inventory.append(Item(item_name, item_cost))
-            self.gold -= item_cost
-            print(f"\nYou bought {item_name} for {item_cost} gold.")
-        else:
-            print(f"Not enough gold to buy {item_name}.")
-
-    def show_inventory(self):
-        print("Your Inventory:")
-        if not self.inventory:
-            print(" - (empty)")
-        else:
-            for item in self.inventory:
-                print(f" - {item.name}")
-        print(f"Gold: {self.gold}")
+from Mistwood_classes import Item, HealthPotion, FireOrb, EarthOrb, Player
 
 # ---- Combat System and Game ----
 player = Player()
@@ -234,6 +145,11 @@ def combat(monster, allow_heal=True):
         else:
             monster_damage = monster['max_attack']
 
+        if player.earth_orb_active:
+            monster_damage = max(0, monster_damage - 1)
+            player.earth_orb_active = False
+            print("Earth Orb effect: Enemy attack reduced by 1!")
+
         player.health -= monster_damage
         print(f"{monster['name']} attacks you for {monster_damage} damage!")
         print(f"You now have {max(player.health, 0)} HP left.")
@@ -251,21 +167,38 @@ def Mob0():
     encounter_monster()
     
 def boss_gauntlet():
-    print("\n Starting the Gauntlet")
+    print("\nStarting the Gauntlet")
     
-    for category in ["Common", "Rare", "Boss"]:
+    # List of categories: Common, Rare, Boss
+    all_monster_categories = ["Common", "Rare", "Boss"]
+    
+    # Loop through the categories and encounter monsters
+    for category in all_monster_categories:
         if player.health <= 0:
             print("You Died!")
             return
         
         print(f"\nNext up: {category} Monster")
         monster = random.choice(Monster0[category])
-        combat(monster, allow_heal=False)
         
-    if player.health > 0:
-        print("\n You wone the Gauntlet!")
-        player.health = player.max_health
+        # Check if it's the last monster
+        is_last_monster = category == all_monster_categories[-1]
+        
+        combat(monster, allow_heal=False)  # Don't heal after each monster
+        
+        # Only heal after the last monster is defeated
+        if is_last_monster and player.health > 0:
+            print("\nYou defeated the last monster of the gauntlet!")
+            player.health = player.max_health
+            print("You heal to full health.")
 
+    # If the player is still alive after all monsters
+    if player.health > 0:
+        print("\nYou won the Gauntlet!")
+    else:
+        print("Game Over - You Died")
+        
+        
 def main_menu():
     while True:
         print("\n=== Main Menu ===")
