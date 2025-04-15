@@ -155,7 +155,7 @@ def combat(monster, allow_heal=True):
             else:
                 print("Invalid action.")
 
-        # --- Monster Turn ---
+
         if monster_health <= 0:
             print(f"\nYou defeated {monster['name']}! Monster defeated.")
             gold_reward = monster.get("gold_drop", 1)
@@ -165,7 +165,7 @@ def combat(monster, allow_heal=True):
             if allow_heal:
                 player.health = player.max_health
             player.show_inventory()
-            break  # combat ends
+            break
 
         print(f"\n{monster['name']}'s turn!")
         monster_damage = predicted_damage
@@ -182,11 +182,12 @@ def combat(monster, allow_heal=True):
 
         if player.health <= 0:
             print("\nYou have been defeated!")
+            print("Game Over - You Died")
             player.inventory = []
             player.gold = 0
             player.health = player.max_health
             player.level = 0
-            print("Game Over - You Died")
+            
             return
 
 def Mob0():
@@ -205,35 +206,25 @@ def legendary_boss_fight():
     
 def boss_gauntlet():
     print("\nStarting the Gauntlet")
-    
-    # List of categories: Common, Rare, Boss
+
     all_monster_categories = ["Common", "Rare", "Boss"]
-    
-    # Loop through the categories and encounter monsters
+
     for category in all_monster_categories:
         if player.health <= 0:
             print("You Died!")
             return
-        
+
         print(f"\nNext up: {category} Monster")
         monster = random.choice(Monster0[category])
-        
-        # Check if it's the last monster
-        is_last_monster = category == all_monster_categories[-1]
-        
-        combat(monster, allow_heal=False)  # Don't heal after each monster
-        
-        # Only heal after the last monster is defeated
-        if is_last_monster and player.health > 0:
-            print("\nYou defeated the last monster of the gauntlet!")
-            player.health = player.max_health
-            print("You heal to full health.")
+        combat(monster, allow_heal=False)
 
-    # If the player is still alive after all monsters
-    if player.health > 0:
-        print("\nYou won the Gauntlet!")
-    else:
-        print("Game Over - You Died")
+        if player.health <= 0:
+            print("You were defeated during the Gauntlet.")
+            return
+        else:
+            print("\aYou Won!")
+
+    player.health = player.max_health
         
         
 def main_menu():

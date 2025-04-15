@@ -40,11 +40,11 @@ class FireOrb(Item):
 
 class WaterOrb(Item):
     def __init__(self):
-        super().__init__("Water Orb")
+        super().__init__("Water Orb", 3)
         
     def use(self, player):
         if player.health < player.max_health:
-            player.health = min(player.heath + 1, player.max_health)
+            player.health = min(player.health + 1, player.max_health)
             print("You used Water Orb and healed for 1 HP.")
         else:
             print("You're already at full health. Water Orb does nothing.")
@@ -72,34 +72,35 @@ class Player:
 
     def use_item(self):
         if not self.inventory:
-            print("Your inventory is empty.")
+            print("You have no items.")
             return
 
         print("\nInventory Items:")
         for i, item in enumerate(self.inventory, 1):
             print(f"{i}. {item.name}")
-
+    
         choice = input("Enter the number of the item you want to use (or press enter to cancel): ").strip()
         if not choice:
             print("Cancelled item use.")
             return
 
-        if choice.isdigit():
-            index = int(choice) - 1
-            if 0 <= index < len(self.inventory):
-                item = self.inventory.pop(index)
-                item.use(self)
-            else:
-                print("Invalid item number.")
-        else:
-            print("Invalid input.")
+        if not choice.isdigit() or int(choice) < 1 or int(choice) > len(self.inventory):
+            print("Invalid choice.")
+            return
+
+        item_index = int(choice) - 1
+        item = self.inventory[item_index]
+
+        item.use(self)  # Heal the player
+        del self.inventory[item_index]  # Remove the used item
 
     def buy_item(self, item_name, item_cost):
         item_lookup = {
             "Health Potion": HealthPotion,
             "Fire Orb": FireOrb,
-            "Earth Orb":EarthOrb,
+            "Earth Orb": EarthOrb,
             "Dagger": Dagger,
+            "Water Orb": WaterOrb,
         }
 
         if self.gold >= item_cost:
