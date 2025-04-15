@@ -34,8 +34,8 @@ class EarthOrb(Item):
         super().__init__("Earth Orb", 3)
             
     def use(self, player):
-        player.earth_orb_active = True
-        print("You used an Earth Orb! The next monster attack will deal 1 less damage.")
+        player.earth_orb_charges += 1
+        print(f"You used an Earth Orb! Enemy attack will be reduced by 1. ({player.earth_orb_charges} charge(s) active)")
             
 
 
@@ -47,7 +47,7 @@ class Player:
         self.gold = 10
         self.level = 0
         self.fire_orb_bonus = 0
-        self.earth_orb_active = False
+        self.earth_orb_charges = 0
 
     def use_item(self):
         if not self.inventory:
