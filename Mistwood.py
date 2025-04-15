@@ -96,17 +96,18 @@ def combat(monster, allow_heal=True):
     while monster_health > 0 and player.health > 0:
         monster_dice_roll = random.randint(1, 4)
         if monster_dice_roll == 1:
-            predicted_damage = monster["mins_attack"]
+           predicted_damage = monster["min_attack"]
         elif monster_dice_roll in [2, 3]:
-            predicted_damage = (monster['min_attack'] + monster['max_attack']) // 2
+           predicted_damage = (monster['min_attack'] + monster['max_attack']) // 2
         else:
-            predicted_damage = monster['max_attack']
-            
-            if player.earth_orb_active and predicted_damage > 0:
-                preview_damage = max(0, predicted_damage - 1)
-                print(f"\n[Danger Sense] the {monster['name']} prepares to strike for {preview_damage} damage (Earth Orb active)!")
-            else:
-                print(f"\n[Danger Sense] The {monster['name']} prepares to strike for {predicted_damage} damage!")
+           predicted_damage = monster['max_attack']
+
+       # Move this outside so it always runs
+        if player.earth_orb_active and predicted_damage > 0:
+           preview_damage = max(0, predicted_damage - 1)
+           print(f"\n[Danger Sense] The {monster['name']} prepares to strike for {preview_damage} damage (Earth Orb active)!")
+        else:
+           print(f"\n[Danger Sense] The {monster['name']} prepares to strike for {predicted_damage} damage!")
                 
         while True:
             action = input("\nYour turn! (Attack / Run / Inventory / Use Item): ").strip().lower()
@@ -151,19 +152,15 @@ def combat(monster, allow_heal=True):
             break
 
         print(f"\n{monster['name']}'s turn!")
-        monster_dice_roll = random.randint(1, 4)
-        if monster_dice_roll == 1:
-            monster_damage = monster['min_attack']
-        elif monster_dice_roll in [2, 3]:
-            monster_damage = (monster['min_attack'] + monster['max_attack']) // 2
-        else:
-            monster_damage = monster['max_attack']
+        monster_damage = predicted_damage
 
         if player.earth_orb_active:
-            monster_damage = max(0, monster_damage - 1)
-            player.earth_orb_active = False
-            print("Earth Orb effect: Enemy attack reduced by 1!")
-
+            reduced_damage = max(0, monster_damage - 1)
+            if reduced_damage < monster_damage:      
+                print("Earth Orb effect: Enemy attack reduced by 1!")
+                player.earth_orb_active = False
+            monster_damage = reduced_damage
+        
         player.health -= monster_damage
         print(f"{monster['name']} attacks you for {monster_damage} damage!")
         print(f"You now have {max(player.health, 0)} HP left.")
