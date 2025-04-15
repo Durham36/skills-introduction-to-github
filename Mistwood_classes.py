@@ -28,6 +28,7 @@ class Dagger(Item):
         player.dagger_active = True
         print("You used Dagger! Damage increased.")
             
+        
 class FireOrb(Item):
     def __init__(self):
         super().__init__("Fire Orb", 2)
@@ -36,6 +37,17 @@ class FireOrb(Item):
         player.fire_orb_bonus = 1
         print("You used a Fire Orb! +1 damage on your next attack.")
 
+
+class WaterOrb(Item):
+    def __init__(self):
+        super().__init__("Water Orb")
+        
+    def use(self, player):
+        if player.health < player.max_health:
+            player.health = min(player.heath + 1, player.max_health)
+            print("You used Water Orb and healed for 1 HP.")
+        else:
+            print("You're already at full health. Water Orb does nothing.")
 
 class EarthOrb(Item):
     def __init__(self):
