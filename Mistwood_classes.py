@@ -77,6 +77,7 @@ class Player:
         item_lookup = {
             "Health Potion": HealthPotion,
             "Fire Orb": FireOrb,
+            "Earth Orb":EarthOrb,
             # Add more item classes here
         }
 
