@@ -22,6 +22,9 @@ Monster0 = {
         {"name": "Spider Queen", "health": 5, "min_attack": 0, "max_attack": 3, "gold_drop": 5},
         {"name": "Giant Ooze", "health": 4, "min_attack": 1, "max_attack": 2, "gold_drop": 4},
         {"name": "Corrupted Serpent", "health": 7, "min_attack": 0, "max_attack": 1, "gold_drop": 4},
+    ],
+    "Legendary": [
+        {"name": "The Ancient Wyrm", "health": 12, "min_attack": 1, "max_attack": 3, "gold_drop": 10}
     ]
 }
 
@@ -177,6 +180,17 @@ def combat(monster, allow_heal=True):
 def Mob0():
     encounter_monster()
     
+    
+def legendary_boss_fight():
+    print("\nA Starting Legendary Boss Fight!")
+    monster = random.choice(Monster0["Legendary"])
+    combat(monster, allow_heal=False)
+    
+    if player.health > 0:
+        print("\n You have defeated the Legendary Boss!")
+        player.show_inventory()
+    
+    
 def boss_gauntlet():
     print("\nStarting the Gauntlet")
     
@@ -219,6 +233,7 @@ def main_menu():
         print("4. Open Store Level (Basic)")
         print("5. Open Store Level (0)")
         print("6. Exit")
+        print("7. Fight the Legendary Boss")
         
         choice = input("Choose an option: ").strip()
         
@@ -235,6 +250,8 @@ def main_menu():
         elif choice == "6":
             print("Exit")
             break
+        elif choice == "7":
+            legendary_boss_fight()
         else:
             print("Invalid option")
         
