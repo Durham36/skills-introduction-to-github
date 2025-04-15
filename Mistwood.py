@@ -97,35 +97,45 @@ def combat(monster, allow_heal=True):
     print(f"{monster['name']} has {monster_health} HP.")
 
     while monster_health > 0 and player.health > 0:
+        # Roll and predict monster attack for this round
         monster_dice_roll = random.randint(1, 4)
         if monster_dice_roll == 1:
-           predicted_damage = monster["min_attack"]
+            predicted_damage = monster["min_attack"]
         elif monster_dice_roll in [2, 3]:
-           predicted_damage = (monster['min_attack'] + monster['max_attack']) // 2
+            predicted_damage = (monster['min_attack'] + monster['max_attack']) // 2
         else:
-           predicted_damage = monster['max_attack']
-
+            predicted_damage = monster['max_attack']
 
         if player.earth_orb_charges > 0 and predicted_damage > 0:
-           preview_damage = max(0, predicted_damage - player.earth_orb_charges)
-           print(f"\n[Danger Sense] The {monster['name']} prepares to strike for {preview_damage} damage (Earth Orb active)!")
+            preview_damage = max(0, predicted_damage - player.earth_orb_charges)
+            print(f"\n[Pre-Attack] The {monster['name']} prepares to strike for {preview_damage} damage (Earth Orb active)!")
         else:
-           print(f"\n[Danger Sense] The {monster['name']} prepares to strike for {predicted_damage} damage!")
-                
-        while True:
+            print(f"\n[Pre-Attack] The {monster['name']} prepares to strike for {predicted_damage} damage!")
+
+        # --- Player Turn ---
+        valid_turn = False
+        while not valid_turn:
             action = input("\nYour turn! (Attack / Run / Inventory / Use Item): ").strip().lower()
+            
             if action == "inventory":
-                player.show_inventory()  # Display inventory when 'inventory' is typed
+                player.show_inventory()
+
             elif action == "use item":
                 player.use_item()
+
             elif action == "attack":
-                player_dice_roll = random.randint(1, 4)
-                if player_dice_roll == 1:
-                    player_damage = 0
-                elif player_dice_roll in [2, 3]:
-                    player_damage = 1
+                if player.dagger_active:
+                    player_damage = random.randint(1, 4)
+                    print("Dagger active!")
+                    player.dagger_active = False
                 else:
-                    player_damage = 2
+                    player_dice_roll = random.randint(1, 4)
+                    if player_dice_roll == 1:
+                        player_damage = 0
+                    elif player_dice_roll in [2, 3]:
+                        player_damage = 1
+                    else:
+                        player_damage = 2
 
                 bonus = player.fire_orb_bonus
                 player.fire_orb_bonus = 0
@@ -136,13 +146,16 @@ def combat(monster, allow_heal=True):
                 monster_health -= player_damage
                 print(f"\nYou attack {monster['name']} and deal {player_damage} damage!")
                 print(f"{monster['name']} now has {max(monster_health, 0)} HP left.")
-                break
+                valid_turn = True  # <- allow monster turn after player acts
+
             elif action == "run":
                 print("\nYou ran away from the battle!")
                 return
+
             else:
                 print("Invalid action.")
 
+        # --- Monster Turn ---
         if monster_health <= 0:
             print(f"\nYou defeated {monster['name']}! Monster defeated.")
             gold_reward = monster.get("gold_drop", 1)
@@ -151,8 +164,8 @@ def combat(monster, allow_heal=True):
             
             if allow_heal:
                 player.health = player.max_health
-            player.show_inventory()  # Show inventory after defeating the monster
-            break
+            player.show_inventory()
+            break  # combat ends
 
         print(f"\n{monster['name']}'s turn!")
         monster_damage = predicted_damage
@@ -162,7 +175,7 @@ def combat(monster, allow_heal=True):
             monster_damage -= reduction
             print(f"Earth Orb effect: Enemy attack reduced by {reduction}!")
             player.earth_orb_charges -= reduction
-        
+
         player.health -= monster_damage
         print(f"{monster['name']} attacks you for {monster_damage} damage!")
         print(f"You now have {max(player.health, 0)} HP left.")
