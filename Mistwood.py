@@ -105,9 +105,9 @@ def combat(monster, allow_heal=True):
         else:
            predicted_damage = monster['max_attack']
 
-       # Move this outside so it always runs
-        if player.earth_orb_active and predicted_damage > 0:
-           preview_damage = max(0, predicted_damage - 1)
+
+        if player.earth_orb_charges > 0 and predicted_damage > 0:
+           preview_damage = max(0, predicted_damage - player.earth_orb_charges)
            print(f"\n[Danger Sense] The {monster['name']} prepares to strike for {preview_damage} damage (Earth Orb active)!")
         else:
            print(f"\n[Danger Sense] The {monster['name']} prepares to strike for {predicted_damage} damage!")
@@ -157,12 +157,11 @@ def combat(monster, allow_heal=True):
         print(f"\n{monster['name']}'s turn!")
         monster_damage = predicted_damage
 
-        if player.earth_orb_active:
-            reduced_damage = max(0, monster_damage - 1)
-            if reduced_damage < monster_damage:      
-                print("Earth Orb effect: Enemy attack reduced by 1!")
-                player.earth_orb_active = False
-            monster_damage = reduced_damage
+        if player.earth_orb_charges > 0:
+            reduction = min(monster_damage, player.earth_orb_charges)
+            monster_damage -= reduction
+            print(f"Earth Orb effect: Enemy attack reduced by {reduction}!")
+            player.earth_orb_charges -= reduction
         
         player.health -= monster_damage
         print(f"{monster['name']} attacks you for {monster_damage} damage!")
