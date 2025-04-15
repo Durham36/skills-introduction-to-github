@@ -20,6 +20,14 @@ class HealthPotion(Item):
             print("Your health is already full.")
             
             
+class Dagger(Item):
+    def __init__(self):
+        super().__init__("Dagger", 7)
+        
+    def use(self, player):
+        player.dagger_active = True
+        print("You used Dagger! Damage increased.")
+            
 class FireOrb(Item):
     def __init__(self):
         super().__init__("Fire Orb", 2)
@@ -48,6 +56,7 @@ class Player:
         self.level = 0
         self.fire_orb_bonus = 0
         self.earth_orb_charges = 0
+        self.dagger_active = False
 
     def use_item(self):
         if not self.inventory:
@@ -78,7 +87,7 @@ class Player:
             "Health Potion": HealthPotion,
             "Fire Orb": FireOrb,
             "Earth Orb":EarthOrb,
-            # Add more item classes here
+            "Dagger": Dagger,
         }
 
         if self.gold >= item_cost:
