@@ -184,6 +184,12 @@ def combat(monster, allow_heal=True):
 
 
         player.health -= monster_damage
+        
+        if monster_damage > 0 and player.armor_equipped:
+            print(f"{player.armor_equipped} was damaged and is now broken!")    
+        player.inventory = [item for item in player.inventory if item.name != player.armor_equipped]
+        player.armor_equipped = None
+        
         print(f"{monster['name']} attacks you for {monster_damage} damage!")
         print(f"You now have {max(player.health, 0)} HP left.")
 
