@@ -207,7 +207,6 @@ def legendary_boss_fight():
     combat(monster, allow_heal=False)
     
     if player.health > 0:
-        print("\n You have defeated the Legendary Boss!")
         player.show_inventory()
     
     
