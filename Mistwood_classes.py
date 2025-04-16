@@ -73,6 +73,8 @@ class Player:
     def __init__(self):
         self.health = 3
         self.max_health = 3
+        self.mana = 3
+        self.max_mana = 3
         self.inventory = []
         self.gold = 10
         self.level = 0
@@ -136,3 +138,4 @@ class Player:
                 print(f" - {item.name}")
         print(f"Equipped Armor: {self.armor_equipped if self.armor_equipped else 'None'}")
         print(f"Gold: {self.gold}")
+        print(f"HP: {self.health}/{self.max_health} |  Mana: {self.mana}/{self.max_mana}")
