@@ -68,6 +68,17 @@ class EarthOrb(Item):
         print(f"You used an Earth Orb! Enemy attack will be reduced by 1. ({player.earth_orb_charges} charge(s) active)")
             
 
+class ManaOrb(Item):
+    def __init__(self):
+        super().__init__("Mana Orb", 3)
+        
+    def use(self, player):
+        if player.mana < player.max_mana:
+            player.mana = min(player.max_mana, player.mana + 1)
+            print("You used a Mana Orb and recovered 1 Mana!")
+        else:
+            print("Your Mana is already full.")
+
 
 class Player:
     def __init__(self):
@@ -114,7 +125,8 @@ class Player:
             "Earth Orb": EarthOrb,
             "Dagger": Dagger,
             "Water Orb": WaterOrb,
-            "Leather Armor": LeatherArmor
+            "Leather Armor": LeatherArmor,
+            "Mana Orb": ManaOrb,
         }
 
         if self.gold >= item_cost:
