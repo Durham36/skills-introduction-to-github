@@ -1,5 +1,5 @@
 import random
-from Mistwood_classes import Item, HealthPotion, FireOrb, EarthOrb, Player
+from Mistwood_classes import Player # Item, HealthPotion, FireOrb, EarthOrb, Player
 
 # ---- Combat System and Game ----
 player = Player()
@@ -143,6 +143,7 @@ def combat(monster, allow_heal=True):
                 if bonus:
                     print("Fire Orb Bonus! +1 damage")
 
+
                 monster_health -= player_damage
                 print(f"\nYou attack {monster['name']} and deal {player_damage} damage!")
                 print(f"{monster['name']} now has {max(monster_health, 0)} HP left.")
@@ -175,6 +176,12 @@ def combat(monster, allow_heal=True):
             monster_damage -= reduction
             print(f"Earth Orb effect: Enemy attack reduced by {reduction}!")
             player.earth_orb_charges -= reduction
+
+        if player.armor_equipped == "Leather Armor":
+             if monster_damage > 0:
+                 monster_damage = max(0, monster_damage - 1)
+                 print("Leather Armor reduces the damage by 1!")
+
 
         player.health -= monster_damage
         print(f"{monster['name']} attacks you for {monster_damage} damage!")

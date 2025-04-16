@@ -20,6 +20,15 @@ class HealthPotion(Item):
             print("Your health is already full.")
             
             
+class LeatherArmor(Item):
+    def __init__(self):
+        super().__init__("Leather Armor", 10)
+        
+    def use(self, player):
+        player.armor_equipped = "Leather Armor"
+        print("you equipped Leather Armor!")
+            
+            
 class Dagger(Item):
     def __init__(self):
         super().__init__("Dagger", 7)
@@ -49,6 +58,7 @@ class WaterOrb(Item):
         else:
             print("You're already at full health. Water Orb does nothing.")
 
+
 class EarthOrb(Item):
     def __init__(self):
         super().__init__("Earth Orb", 3)
@@ -69,6 +79,7 @@ class Player:
         self.fire_orb_bonus = 0
         self.earth_orb_charges = 0
         self.dagger_active = False
+        self.armor_equipped = None
 
     def use_item(self):
         if not self.inventory:
@@ -101,6 +112,7 @@ class Player:
             "Earth Orb": EarthOrb,
             "Dagger": Dagger,
             "Water Orb": WaterOrb,
+            "Leather Armor": LeatherArmor
         }
 
         if self.gold >= item_cost:
@@ -122,4 +134,5 @@ class Player:
         else:
             for item in self.inventory:
                 print(f" - {item.name}")
+        print(f"Equipped Armor: {self.armor_equipped if self.armor_equipped else 'None'}")
         print(f"Gold: {self.gold}")
