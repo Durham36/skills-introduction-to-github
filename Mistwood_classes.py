@@ -34,7 +34,7 @@ class FireOrb(Item):
         super().__init__("Fire Orb", 2)
         
     def use(self, player):
-        player.fire_orb_bonus = 1
+        player.fire_orb_bonus += 1
         print("You used a Fire Orb! +1 damage on your next attack.")
 
 
