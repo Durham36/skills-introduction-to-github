@@ -112,7 +112,6 @@ def combat(monster, allow_heal=True):
         else:
             print(f"\n[Pre-Attack] The {monster['name']} prepares to strike for {predicted_damage} damage!")
 
-        # --- Player Turn ---
         valid_turn = False
         while not valid_turn:
             action = input("\nYour turn! (Attack / Run / Inventory / Use Item): ").strip().lower()
@@ -177,18 +176,26 @@ def combat(monster, allow_heal=True):
             print(f"Earth Orb effect: Enemy attack reduced by {reduction}!")
             player.earth_orb_charges -= reduction
 
-        if player.armor_equipped == "Leather Armor":
-             if monster_damage > 0:
-                 monster_damage = max(0, monster_damage - 1)
-                 print("Leather Armor reduces the damage by 1!")
+        if player.armor_equipped == "Leather Armor" and monster_damage > 0:
+            monster_damage = max(0, monster_damage - 1)
+            print("Leather Armor reduces the damage by 1!")
 
+        if monster_damage > 0:
+            player.health -= monster_damage
+            print(f"{monster['name']} attacks you for {monster_damage} damage!")
+            print(f"You now have {max(player.health, 0)} HP left.")
 
-        player.health -= monster_damage
-        
-        if monster_damage > 0 and player.armor_equipped:
-            print(f"{player.armor_equipped} was damaged and is now broken!")    
-        player.inventory = [item for item in player.inventory if item.name != player.armor_equipped]
-        player.armor_equipped = None
+            if player.armor_equipped == "Leather Armor":
+                player.armor_equipped = None
+            for i, item in enumerate(player.inventory):
+                if item.name == "Leather Armor":
+                    del player.inventory[i]
+                    break
+            print("Your Armor absorbed damage and broke!")
+
+        else:
+            print(f"{monster['name']} attacks but deals no damage!")
+                    
         
         print(f"{monster['name']} attacks you for {monster_damage} damage!")
         print(f"You now have {max(player.health, 0)} HP left.")
