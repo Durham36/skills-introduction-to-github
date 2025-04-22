@@ -12,7 +12,7 @@ class Item:
         
 class HealthPotion(Item):
     def __init__(self):
-        super().__init__("Health Potion", 5)
+        super().__init__("Health Potion", 5, consumable=True)
         
     def use(self, player):
         if player.health < player.max_health:
@@ -34,7 +34,7 @@ class LeatherArmor(Item):
             
 class Dagger(Item):
     def __init__(self):
-        super().__init__("Dagger", 7)
+        super().__init__("Dagger", 7, consumable=True)
         
     def use(self, player):
         player.dagger_active = True
@@ -42,13 +42,14 @@ class Dagger(Item):
         
         
 class FireBall(Item):
+    COST_UNITS = int(1.5 * MANA_UNIT)
+    
     def __init__(self):
         super().__init__("FireBall", 7, consumable=False)
         
     def use(self, player):
-        cost = 1.5
-        if player.mana_units >= cost:
-            player.mana_units -= cost
+        if player.mana_units >= self.COST_UNITS:
+            player.mana_units -= self.COST_UNITS
             player.fireball_bonus += 1
             print("You cast FireBall! -1.5 mana, +1 damage to your next attack!")
         else:
@@ -57,7 +58,7 @@ class FireBall(Item):
         
 class FireOrb(Item):
     def __init__(self):
-        super().__init__("Fire Orb", 2)
+        super().__init__("Fire Orb", 2, consumable=True)
         
     def use(self, player):
         player.fire_orb_bonus += 1
@@ -66,7 +67,7 @@ class FireOrb(Item):
 
 class WaterOrb(Item):
     def __init__(self):
-        super().__init__("Water Orb", 3)
+        super().__init__("Water Orb", 3, consumable=True)
         
     def use(self, player):
         if player.health < player.max_health:
@@ -78,7 +79,7 @@ class WaterOrb(Item):
 
 class EarthOrb(Item):
     def __init__(self):
-        super().__init__("Earth Orb", 3)
+        super().__init__("Earth Orb", 3, consumable=True)
             
     def use(self, player):
         player.earth_orb_charges += 1
@@ -87,7 +88,7 @@ class EarthOrb(Item):
 
 class ManaOrb(Item):
     def __init__(self):
-        super().__init__("Mana Orb", 3)
+        super().__init__("Mana Orb", 3, consumable=True)
         
     def use(self, player):
         if player.mana < player.max_mana:
@@ -138,8 +139,8 @@ class Player:
         
         idx = int(choice) - 1
         item = self.inventory[idx]
+        
         item.use(self)
-
         if item.consumable:
             del self.inventory[idx]
 

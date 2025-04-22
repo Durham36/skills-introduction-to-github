@@ -39,14 +39,14 @@ ShopB = {
 Shop0 = {
     "Potions": [("Health Potion", 5)],
     "Weapons": [("Dagger", 7)],
-    "Spells": [("Fireball", 7)],
+    "Spells": [("FireBall", 7)],
     "Armor": [("Leather Armor", 10)]
 }
 
 Shop1 = {
     "Orbs": [("Orb of Acid", 3), ("Orb of Return", 8)],
     "Weapons": [("Rune Dagger", 10)],
-    "Spells": [("Fireball II", 10), ("Lesser Heal", 8), ("FireBolt", 10)],
+    "Spells": [("FireBall II", 10), ("Lesser Heal", 8), ("FireBolt", 10)],
     "Armor": [("Rune Hide Armor", 15)]
 }
 
@@ -136,11 +136,11 @@ def combat(monster, allow_heal=True):
                         player_damage = 2
 
                 bonus = player.fire_orb_bonus + player.fireball_bonus
-                player.fireball_bonus = 0
-                player.fire_orb_bonus = 0
+                player.fire_orb_bonus = player.firevall_bonus = 0
+                
                 player_damage += bonus
                 if bonus:
-                    print("Spell/Orb Bonus! +{bonus} damage!")
+                    print("fSpell/Orb Bonus! +{bonus} damage!")
 
 
                 monster_health -= player_damage
