@@ -45,10 +45,10 @@ class FireBall(Item):
         super().__init__("FireBall", 7)
         
     def use(self, player):
-        cost = int(1.5 * MANA_UNIT)
+        cost = 1.5
         if player.mana_units >= cost:
             player.mana_units -= cost
-            player.fireball_bonus = 1
+            player.fireball_bonus += 1
             print("You cast FireBall! -1.5 mana, +1 damage to your next attack!")
         else:
             print("Not enough Mana (needss 1.5).")
@@ -146,6 +146,7 @@ class Player:
             "Water Orb": WaterOrb,
             "Leather Armor": LeatherArmor,
             "Mana Orb": ManaOrb,
+            "FireBall": FireBall,
         }
 
         if self.gold >= item_cost:
