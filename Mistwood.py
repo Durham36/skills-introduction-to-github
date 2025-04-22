@@ -130,7 +130,7 @@ def combat(monster, allow_heal=True):
                     player_dice_roll = random.randint(1, 4)
                     if player_dice_roll == 1:
                         player_damage = 0
-                    elif player_dice_roll in [2, 3]:
+                    elif player_dice_roll in (2, 3):
                         player_damage = 1
                     else:
                         player_damage = 2
