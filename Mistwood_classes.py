@@ -1,3 +1,5 @@
+MANA_UNIT = 10
+
 class Item:
     def __init__(self, name, cost):
         self.name = name
@@ -36,6 +38,20 @@ class Dagger(Item):
     def use(self, player):
         player.dagger_active = True
         print("You used Dagger! Damage increased.")
+        
+        
+class FireBall(Item):
+    def __init__(self):
+        super().__init__("FireBall", 7)
+        
+    def use(self, player):
+        cost = int(1.5 * MANA_UNIT)
+        if player.mana_units >= cost:
+            player.mana_units -= cost
+            player.fireball_bonus = 1
+            print("You cast FireBall! -1.5 mana, +1 damage to your next attack!")
+        else:
+            print("Not enough Mana (needss 1.5).")
             
         
 class FireOrb(Item):
@@ -93,6 +109,9 @@ class Player:
         self.earth_orb_charges = 0
         self.dagger_active = False
         self.armor_equipped = None
+        self.mana_units = 3* MANA_UNIT
+        self.max_mana_units = 3 * MANA_UNIT
+        self.fireball_bonus = 0
 
     def use_item(self):
         if not self.inventory:
@@ -115,8 +134,8 @@ class Player:
         item_index = int(choice) - 1
         item = self.inventory[item_index]
 
-        item.use(self)  # Heal the player
-        del self.inventory[item_index]  # Remove the used item
+        item.use(self)
+        del self.inventory[item_index]
 
     def buy_item(self, item_name, item_cost):
         item_lookup = {
@@ -141,7 +160,7 @@ class Player:
         else:
             print(f"Not enough gold to buy {item_name}.")
 
-    def show_inventory(self):  # Added 'self' to make this an instance method
+    def show_inventory(self):
         print("Your Inventory:")
         if not self.inventory:
             print(" - (empty)")
@@ -150,4 +169,4 @@ class Player:
                 print(f" - {item.name}")
         print(f"Equipped Armor: {self.armor_equipped if self.armor_equipped else 'None'}")
         print(f"Gold: {self.gold}")
-        print(f"HP: {self.health}/{self.max_health} |  Mana: {self.mana}/{self.max_mana}")
+        print(f"HP: {self.health}/{self.max_health} |  Mana: {self.mana_units/MANA_UNIT:.1f}/{self.max_mana_units/MANA_UNIT}")
