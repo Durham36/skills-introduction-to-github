@@ -1,9 +1,10 @@
 MANA_UNIT = 10
 
 class Item:
-    def __init__(self, name, cost):
+    def __init__(self, name, cost, consumable=True):
         self.name = name
         self.cost = cost
+        self.consumable = consumable
         
     def use(self, player):
         print(f"You used {self.name}, but nothing happened.")
@@ -42,7 +43,7 @@ class Dagger(Item):
         
 class FireBall(Item):
     def __init__(self):
-        super().__init__("FireBall", 7)
+        super().__init__("FireBall", 7, consumable=False)
         
     def use(self, player):
         cost = 1.5
@@ -51,7 +52,7 @@ class FireBall(Item):
             player.fireball_bonus += 1
             print("You cast FireBall! -1.5 mana, +1 damage to your next attack!")
         else:
-            print("Not enough Mana (needss 1.5).")
+            print("Not enough mana to cast Fireball!")
             
         
 class FireOrb(Item):
@@ -112,6 +113,7 @@ class Player:
         self.mana_units = 3* MANA_UNIT
         self.max_mana_units = 3 * MANA_UNIT
         self.fireball_bonus = 0
+        self.inventory = []
 
     def use_item(self):
         if not self.inventory:
@@ -133,9 +135,13 @@ class Player:
 
         item_index = int(choice) - 1
         item = self.inventory[item_index]
-
+        
+        idx = int(choice) - 1
+        item = self.inventory[idx]
         item.use(self)
-        del self.inventory[item_index]
+
+        if item.consumable:
+            del self.inventory[idx]
 
     def buy_item(self, item_name, item_cost):
         item_lookup = {
