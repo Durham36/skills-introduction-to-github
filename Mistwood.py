@@ -135,11 +135,11 @@ def combat(monster, allow_heal=True):
                         player_damage = 2
 
                 bonus = player.fire_orb_bonus + player.fireball_bonus
-                player.fire_orb_bonus = player.firevall_bonus = 0
+                player.fire_orb_bonus = player.fireball_bonus = 0
                 
                 player_damage += bonus
                 if bonus:
-                    print("fSpell/Orb Bonus! +{bonus} damage!")
+                    print("Spell/Orb Bonus! +{bonus} damage!")
 
 
                 monster_health -= player_damage
@@ -156,7 +156,7 @@ def combat(monster, allow_heal=True):
 
 
         if monster_health <= 0:
-            print(f"\nYou defeated {monster['name']}! Monster defeated.")
+          #  print(f"\nYou defeated {monster['name']}! Monster defeated.")
             gold_reward = monster.get("gold_drop", 1)
             player.gold += gold_reward
             print(f"\nYou defeated {monster['name']}! It dropped {gold_reward} gold.")

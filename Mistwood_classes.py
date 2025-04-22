@@ -91,9 +91,9 @@ class ManaOrb(Item):
         super().__init__("Mana Orb", 3, consumable=True)
         
     def use(self, player):
-        if player.mana < player.max_mana:
-            player.mana = min(player.max_mana, player.mana + 1)
-            print("You used a Mana Orb and recovered 1 Mana!")
+        if player.mana_units < player.max_mana_units:
+            player.mana_units = min(player.max_mana_units, player.mana_units + 20)
+            print("You used a Mana Orb and recovered 2 Mana!")
         else:
             print("Your Mana is already full.")
 
