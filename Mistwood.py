@@ -96,7 +96,6 @@ def combat(monster, allow_heal=True):
     print(f"{monster['name']} has {monster_health} HP.")
 
     while monster_health > 0 and player.health > 0:
-        # Roll and predict monster attack for this round
         monster_dice_roll = random.randint(1, 4)
         if monster_dice_roll == 1:
             predicted_damage = monster["min_attack"]
@@ -169,36 +168,36 @@ def combat(monster, allow_heal=True):
 
         print(f"\n{monster['name']}'s turn!")
         monster_damage = predicted_damage
-
+        monster_damage_before = predicted_damage
+        monster_damage = monster_damage_before
+        
         if player.earth_orb_charges > 0:
             reduction = min(monster_damage, player.earth_orb_charges)
             monster_damage -= reduction
             print(f"Earth Orb effect: Enemy attack reduced by {reduction}!")
             player.earth_orb_charges -= reduction
 
+        armor_blocked = 0
         if player.armor_equipped == "Leather Armor" and monster_damage > 0:
-            monster_damage = max(0, monster_damage - 1)
-            print("Leather Armor reduces the damage by 1!")
+            armor_blocked = 1
+            monster_damage -= armor_blocked
+            print("Your Armor reduces the damage by 1!")
 
         if monster_damage > 0:
             player.health -= monster_damage
             print(f"{monster['name']} attacks you for {monster_damage} damage!")
-            print(f"You now have {max(player.health, 0)} HP left.")
-
-            if player.armor_equipped == "Leather Armor":
-                player.armor_equipped = None
-            for i, item in enumerate(player.inventory):
-                if item.name == "Leather Armor":
-                    del player.inventory[i]
-                    break
-            print("Your Armor absorbed damage and broke!")
-
+            print(f"You now have {max(player.health,0)} HP left.")
         else:
             print(f"{monster['name']} attacks but deals no damage!")
-                    
-        
-        print(f"{monster['name']} attacks you for {monster_damage} damage!")
-        print(f"You now have {max(player.health, 0)} HP left.")
+                
+        if player.armor_equipped == "Leather Armor" and armor_blocked and monster_damage > 0:
+            player.armor_equipped = None
+            
+            for i, itm in enumerate(player.inventory):
+                if itm.name == "Leather Armor":
+                    del player.inventory[i]
+                    break
+            print("Your Leather Armor absorbed damage and broke!")
 
         if player.health <= 0:
             print("\nYou have been defeated!")
@@ -240,8 +239,6 @@ def boss_gauntlet():
         if player.health <= 0:
             print("You were defeated during the Gauntlet.")
             return
-        else:
-            print("\aYou Won!")
 
     player.health = player.max_health
         
