@@ -1,7 +1,6 @@
 import random
 from Mistwood_classes import Player # Item, HealthPotion, FireOrb, EarthOrb, Player
 
-# ---- Combat System and Game ----
 player = Player()
 
 biome = ["Mistwood Forest", "Haunted Woods", "Desert Temple"]
@@ -136,17 +135,18 @@ def combat(monster, allow_heal=True):
                     else:
                         player_damage = 2
 
-                bonus = player.fire_orb_bonus
+                bonus = player.fire_orb_bonus + player.fireball_bonus
+                player.fireball_bonus = 0
                 player.fire_orb_bonus = 0
                 player_damage += bonus
                 if bonus:
-                    print("Fire Orb Bonus! +1 damage")
+                    print("Spell/Orb Bonus! +{bonus} damage!")
 
 
                 monster_health -= player_damage
                 print(f"\nYou attack {monster['name']} and deal {player_damage} damage!")
                 print(f"{monster['name']} now has {max(monster_health, 0)} HP left.")
-                valid_turn = True  # <- allow monster turn after player acts
+                valid_turn = True
 
             elif action == "run":
                 print("\nYou ran away from the battle!")
