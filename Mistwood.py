@@ -1,5 +1,6 @@
 import random
 from Mistwood_classes import Player # Item, HealthPotion, FireOrb, EarthOrb, Player
+from Mistwood_Encounters import Mistwood_encounters
 
 player = Player()
 
@@ -243,6 +244,26 @@ def boss_gauntlet():
     player.health = player.max_health
         
         
+def run_mistwood_encounters(encounter):
+    print("\nStarting scripted encounter...\n")
+    for monster in encounter:
+        if player.health <= 0:
+            print("You were defeated!")
+            return
+        combat(monster, allow_heal=False)
+        
+    print("You defeated all monsters in the encounter!")
+    player.show_inventory()
+
+
+def test_Mistwood_encounters():
+    for i, encounter in enumerate(Mistwood_encounters):
+        print(f"\n--- Encounter {i+1} ---")
+        run_mistwood_encounters(encounter)
+        if player.health <= 0:
+            break
+
+
 def main_menu():
     while True:
         print("\n=== Main Menu ===")
@@ -253,6 +274,7 @@ def main_menu():
         print("5. Open Store Level (0)")
         print("6. Exit")
         print("7. Fight the Legendary Boss")
+        print("8. Mistwood Encounters")
         
         choice = input("Choose an option: ").strip()
         
@@ -271,6 +293,8 @@ def main_menu():
             break
         elif choice == "7":
             legendary_boss_fight()
+        elif choice == "8":
+            test_Mistwood_encounters()
         else:
             print("Invalid option")
         
