@@ -224,27 +224,6 @@ def legendary_boss_fight():
         player.show_inventory()
     
     
-def boss_gauntlet():
-    print("\nStarting the Gauntlet")
-
-    all_monster_categories = ["Common", "Rare", "Boss"]
-
-    for category in all_monster_categories:
-        if player.health <= 0:
-            print("You Died!")
-            return
-
-        print(f"\nNext up: {category} Monster")
-        monster = random.choice(Monster0[category])
-        combat(monster, allow_heal=False)
-
-        if player.health <= 0:
-            print("You were defeated during the Gauntlet.")
-            return
-
-    player.health = player.max_health
-        
-        
 def run_mistwood_encounters(encounter):
     print("\nStarting scripted encounter...\n")
     for monster in encounter:
@@ -275,20 +254,20 @@ def main_menu():
     while True:
         print("\n=== Main Menu ===")
         print("1. Fight a Monster")
-        print("2. Boss Gauntlet")
+        print("2. Mistwood Encounters")
         print("3. Show Inventory")
         print("4. Open Store Level (Basic)")
         print("5. Open Store Level (0)")
         print("6. Exit")
         print("7. Fight the Legendary Boss")
-        print("8. Mistwood Encounters")
+
         
         choice = input("Choose an option: ").strip()
         
         if choice == "1":
             Mob0()
         elif choice == "2":
-            boss_gauntlet()
+            play_next_mistwood_encounter()
         elif choice == "3":
             player.show_inventory()
         elif choice == "4":
@@ -300,8 +279,6 @@ def main_menu():
             break
         elif choice == "7":
             legendary_boss_fight()
-        elif choice == "8":
-            play_next_mistwood_encounter()
         else:
             print("Invalid option")
         
