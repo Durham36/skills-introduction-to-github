@@ -2,6 +2,7 @@ import random
 from Mistwood_classes import Player # Item, HealthPotion, FireOrb, EarthOrb, Player
 from Mistwood_Encounters import Mistwood_encounters
 
+mistwood_encounter_index = 0
 player = Player()
 
 biome = ["Mistwood Forest", "Haunted Woods", "Desert Temple"]
@@ -160,7 +161,7 @@ def combat(monster, allow_heal=True):
           #  print(f"\nYou defeated {monster['name']}! Monster defeated.")
             gold_reward = monster.get("gold_drop", 1)
             player.gold += gold_reward
-            print(f"\nYou defeated {monster['name']}! It dropped {gold_reward} gold.")
+            print(f"\nYou defeated {monster['name']}! It dropped {gold_reward} gold.\n")
             
             if allow_heal:
                 player.health = player.max_health
@@ -256,13 +257,19 @@ def run_mistwood_encounters(encounter):
     player.show_inventory()
 
 
-def test_Mistwood_encounters():
-    for i, encounter in enumerate(Mistwood_encounters):
-        print(f"\n--- Encounter {i+1} ---")
-        run_mistwood_encounters(encounter)
-        if player.health <= 0:
-            break
-
+def play_next_mistwood_encounter():
+    global mistwood_encounter_index
+    
+    if mistwood_encounter_index >= len(Mistwood_encounters):
+        print("You have completed all Mistwood encounters")
+        return
+    
+    print(f"\n--- Mistwood Encounter {mistwood_encounter_index + 1} ---")
+    encounter = Mistwood_encounters[mistwood_encounter_index]
+    run_mistwood_encounters(encounter)
+    
+    if player.health > 0:
+        mistwood_encounter_index += 1
 
 def main_menu():
     while True:
@@ -294,7 +301,7 @@ def main_menu():
         elif choice == "7":
             legendary_boss_fight()
         elif choice == "8":
-            test_Mistwood_encounters()
+            play_next_mistwood_encounter()
         else:
             print("Invalid option")
         
