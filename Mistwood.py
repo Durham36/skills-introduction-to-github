@@ -232,7 +232,7 @@ def run_mistwood_encounters(encounter):
             return
         combat(monster, allow_heal=False)
         
-    print("You defeated all monsters in the encounter!")
+    print("You defeated all monsters in the encounter!\n")
     player.show_inventory()
 
 
@@ -249,6 +249,8 @@ def play_next_mistwood_encounter():
     
     if player.health > 0:
         mistwood_encounter_index += 1
+        player.health = player.max_health
+        player.mana = player.max_mana
 
 def main_menu():
     while True:
